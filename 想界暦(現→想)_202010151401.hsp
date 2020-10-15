@@ -9,9 +9,9 @@
 	dim monthnum,12
 	monthnum=29, 30, 29, 30, 29, 30, 29, 29, 30, 29, 32, 29//1-12gatsu no kaku Hiduke
 	screen 0,640,480
-	year_e=2020
-	month_e=8
-	day_e=16
+	year_e=1987
+	month_e=3
+	day_e=31
 	time_e=0.0//Hiduke Shitei, e=earth,i=izumi
 	elapse_e=julius(year_e,month_e,day_e)-julius(1987,4,1)+time_e;19870401e=19860401i
 	elapse_i=1.0*elapse_e*86400.0/85874.08//Genten wo 19860401i nisite Byousuu no Chigai wp Kakeru
@@ -32,8 +32,8 @@
 	dayTmp=elapse_fi-floor((year_i-1986)*354.7578)//1/1 Kara no KeikaNissuu, Tadashi 1Gatsu-3Gatsu ha Zennen no 12Gatsu-15Gatsu to shite Keisan
 	monthTmp=0
 	Ts=0
-	for j, 3, 14//1Tsuki goto ni Nissuu wo Gensan
-		if (i=10) and ((year_i \ 400=0)or((year_i \ 4=0)and(year_i \ 100 != 0))):Ts=1:else:Ts=0//HabukiDoshi no Keisan
+	for j, 3, 15//1Tsuki goto ni Nissuu wo Gensan
+		if (j=10) and ((year_i \ 400=0)or((year_i \ 4=0)and(year_i \ 100 != 0))):Ts=1:else:Ts=0//HabukiDoshi no Keisan
 		if j>=12:i=j-12:else:i=j
 		if dayTmp<=monthnum(i)-Ts{
 			monthTmp=i+1
