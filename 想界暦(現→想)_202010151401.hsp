@@ -1,0 +1,53 @@
+#include "hspmath.as"
+#module
+#include "hspmath.as"
+#defcfunc julius int yearI, int monthI, int day
+	if monthI<=2:month=monthI+12:year=yearI-1:else:month=monthI:year=yearI
+	jday=floor(365.25*year)+floor(1.0*year/400)-floor(1.0*year/100)+floor(30.59*(month-2))+day-678912
+	return jday
+#global
+	dim monthnum,12
+	monthnum=29, 30, 29, 30, 29, 30, 29, 29, 30, 29, 32, 29
+	screen 0,640,480
+	year_e=2020
+	month_e=8
+	day_e=16
+	time_e=0.0
+	elapse_e=julius(year_e,month_e,day_e)-julius(1987,4,1)+time_e;19870401e=19860401i
+	elapse_i=1.0*elapse_e*86400.0/85874.08
+	time_i=elapse_i-floor(elapse_i)
+	elapse_fi=int(elapse_i)
+	
+	year_i=floor(1.0*(elapse_fi+118)/354.7578)+1986//4/1->1/1
+	if elapse_fi-floor(1.0*(year_i-1986)*354.7578)<0:year_i=year_i-1
+	if elapse_fi-floor(1.0*(year_i-1986)*354.7578)>=355{
+		if (year_i \ 400=0)or((year_i \ 4=0)and(year_i \ 100 != 0)){
+			year_i=year_i+1
+		}else{
+			if elapse_fi-floor(1.0*(year_i-1986)*354.7578)>=355{
+				year_i=year_i+1
+			}
+		}
+	}
+	dayTmp=elapse_fi-floor((year_i-1986)*354.7578)
+	monthTmp=0
+	Ts=0
+	for j, 3, 14
+		if (i=10) and ((year_i \ 400=0)or((year_i \ 4=0)and(year_i \ 100 != 0))):Ts=1:else:Ts=0
+		if j>=12:i=j-12:else:i=j
+		if dayTmp<=monthnum(i)-Ts{
+			monthTmp=i+1
+			_break
+		}else{
+			dayTmp=dayTmp-monthnum(i)+Ts
+		}
+	next
+	month_i=monthTmp
+	if month_i<=3:year_i=year_i+1
+	if month_i=4:day_i=dayTmp+1:else:day_i=dayTmp
+	hour_i=int(time_i*24)
+	minute_i=int((time_i*24-hour_i)*60)
+	second_i=int(((time_i*24-hour_i)*60-minute_i)*60)
+	year_i=int(year_i)
+	mes ""+year_i+"/"+month_i+"/"+day_i+"\n"+hour_i+":"+minute_i+":"+second_i
+	stop
