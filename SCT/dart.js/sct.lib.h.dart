@@ -14,7 +14,18 @@ class EarthlyCal{
   num timestamp;
 
   Map<Map<dynamic>> data;
-  data.sou={months:12,daysPerMons:[,,,,],sysNames:{jp:["","","","you","nire","taku","myou"],en:["","","","you","nire","taku","myou"]},secVal:};
+  data.sou={
+    months:12,
+    daysPerMons:[,,,,],
+    sysNames:{
+      jp:["","","","you","nire","taku","myou"],
+      en:["","","","you","nire","taku","myou"],
+      ljp:["","","","you","nire","taku","myou"],
+      len:["","","","you","nire","taku","myou"],
+      st:["","","","you","nire","taku","myou"]
+    },
+    secVal:
+  };
   data.ear;
 
   Cal_Sys(this.system);
