@@ -29,20 +29,22 @@ class EarthlyCal{
   num milisec;
   num timestamp;
 //暦法ごとの各種定義。連想配列の連想配列。
-  Map<Map<dynamic>> data;
-  data.sou={
-    months:12,
-    daysPerMons:[,,,,],
-    sysNames:{
-      jp:["","","","you","nire","taku","myou"],
-      en:["","","","you","nire","taku","myou"],
-      ljp:["","","","you","nire","taku","myou"],
-      len:["","","","you","nire","taku","myou"],
-      st:["","","","you","nire","taku","myou"]
+  Map<Map<dynamic>> data={};
+  data["sou"]={
+    "months":12,
+    "daysPerMons":[,,,,],
+    "sysNames":{
+      "jp":["","枂","","杳","㭙","枌","杪"],
+      "en":["","","","you","nire","taku","myou"],
+      "ljp":["想界年","想界月","想界週","想界日","想界時","想界分","想界秒"],
+      "len":["Soukai-year","Soukai-month","Soukai-week","Soukai-day","Soukai-hour","Soukai-minuits","Soukai-seconds"],
+      "st":["","","","y","n","t","m"]
     },
-    secVal:
+    "secVal":0.99391,
+    "epock":{"ear":0},
+    "ie":[{"how":-1,"where":"day","in":"month","at":11}]
   };
-  data.ear;
+  data.["ear"];
 
   //コンストラクタ
   Cal_Sys(this.system);
@@ -71,6 +73,11 @@ class EarthlyCal{
 
   //タイムスタンプから日付時刻を計算するメソッド。
   void calcDate(){
+
+  }
+
+  //置閏及び抜去：Intercalation&Extraction
+  void ie_do(){
 
   }
 
