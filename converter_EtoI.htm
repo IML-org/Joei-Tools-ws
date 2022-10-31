@@ -1,0 +1,107 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>現界暦→想界暦変換器</TITLE>
+<SCRIPT language="JavaScript">
+var sng = new Date(1987, 3, 1);
+var monthnum = [29, 30, 29, 30, 29, 30, 29, 29, 30, 29, 32, 29];
+
+function convert_EtoI(dt){
+	var elapse_e = (dt.getTime() - sng.getTime()) / 864e5;
+	var elapse_i = elapse_e * 86400.0 / 85874.08;
+	var time_i =  elapse_i - Math.floor(elapse_i);
+	var elapse_fi = Math.floor(elapse_i);
+	var ts = 0;
+
+	var year_i = Math.floor((elapse_fi + 118) / 354.7578) + 1986;
+	if (elapse_fi - Math.floor((year_i - 1986) * 354.7578) <= 0){
+		year_i--;
+	}
+	if (elapse_fi - Math.floor((year_i - 1986) * 354.7578) >= 355){
+		if (year_i % 400 == 0 || year_i % 4 == 0 && year_i % 100 != 0){
+			year_i++;
+		}else{
+			if (elapse_fi - Math.floor((year_i - 1986) * 354.7578) >= 355){
+				year_i++;
+			}
+		}
+	}
+
+	var dayTmp = elapse_fi - Math.floor((year_i - 1986) * 354.7578);//1/1からの経過日数
+	var monthTmp = 0;
+	ts = 0;
+	var i = 0;
+	var j = 0;
+	for (j = 3; j < 15; j++){
+		if (j == 10 && (year_i % 400 == 0 || year_i % 4 == 0 && year_i % 100 != 0)){
+			ts = 1;
+		}else{
+			ts = 0;
+		}
+		if (j >= 12){
+			i = j - 12;
+		}else{
+			i = j;
+		}
+		if (dayTmp < (monthnum[i] - ts)){
+			monthTmp = i + 1;
+			break;
+		}else{
+			dayTmp = dayTmp - monthnum[i] + ts;
+		}
+	}
+	var month_i = monthTmp;
+	if (month_i <= 3){
+		year_i++
+	}
+	var day_i　= dayTmp + 1
+	var hour_i = Math.floor(time_i * 24);
+	var minute_i = Math.floor((time_i * 24 - hour_i) * 60);
+	var second_i = Math.floor(((time_i * 24 - hour_i) * 60 - minute_i) * 60);
+	return "現界暦：" + dt.getFullYear() + "年 " + (dt.getMonth() + 1) + "月 " + dt.getDate() + "日 " + dt.getHours() + "：" + dt.getMinutes() + "：" +　dt.getSeconds() + "\n想界暦：" + year_i + "年 " + month_i + "月 " + day_i + "日 " + hour_i + "：" + minute_i + "：" + second_i; 
+}
+function today() {
+	var now = new Date();
+	document.forms[0].year.value = now.getFullYear();
+	document.forms[0].month.value = now.getMonth() + 1;
+	document.forms[0].day.value = now.getDate();
+	document.forms[0].hour.value = now.getHours();
+	document.forms[0].minute.value = now.getMinutes();
+	document.forms[0].second.value = now.getSeconds();
+}
+function format(num, keta) {
+	var d = Math.pow(10, keta);
+	return Math.Math.floor(num * d + .5) / d;
+}
+function calc_EtoI() {
+	var form = document.forms[0];
+	form.result.value = "--- 計算中 ---";
+	var tm = new Date(form.year.value, form.month.value - 1, form.day.value, form.hour.value, form.minute.value, form.second.value);
+
+	var str = new String();
+	str += convert_EtoI(tm);
+	form.result.value = str;
+}
+
+</SCRIPT>
+</HEAD>
+<BODY>
+<TABLE width=100% border=0 cellspacing=0 cellpadding=8></TABLE>
+<BLOCKQUOTE>
+
+<FORM>
+ <INPUT type=text size=4 name=year>年
+ <INPUT type=text size=2 name=month>月
+ <INPUT type=text size=2 name=day>日
+ <INPUT type=text size=2 name=hour>時
+ <INPUT type=text size=2 name=minute>分
+ <INPUT type=text size=2 name=second>秒
+ <INPUT type=button value=" 現在時刻 " onclick="today()">
+ <BR>
+ <INPUT type=button value="　現→想　" onclick="calc_EtoI()">
+ <BR>
+ <TEXTAREA name=result rows=9 cols=60 readonly></TEXTAREA>
+</FORM>
+</BLOCKQUOTE>
+</BODY>
+</HTML>
