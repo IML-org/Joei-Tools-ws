@@ -1,0 +1,83 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>想界暦→現界暦変換器</TITLE>
+<SCRIPT language="JavaScript">
+function julius_i(year_i, month_i, day_i){
+	var monthnum = [29, 29, 30, 29, 30, 29, 30, 29, 29, 30, 29, 32];
+	var daycount = 0;
+	var year = 0;
+	var month = 0;
+	if (month_i == 12){
+		month = 0;
+		year = parseInt(year_i) + 1;
+	}else{
+		month = parseInt(month_i);
+		year = parseInt(year_i);
+	}
+	var jday = Math.floor(354.75 * (year - 3.0)) - Math.floor(year / 400.0) + Math.floor(year / 100.0) + Math.floor(day_i) - 703602;
+	var i = 0;
+	for (i = 0; i < month; i++){
+			daycount += monthnum[i];
+	}
+	jday += daycount;
+	return jday
+}
+
+var week = ["水",　"木", "金", "土", "日", "月", "火"]
+
+function convert_ItoE(year_i, month_i, day_i, hour_i, minute_i, second_i){
+	var elapse_i = julius_i(parseInt(year_i), parseInt(month_i), parseInt(day_i)) + ((parseInt(second_i) / 60.0 + parseInt(minute_i)) / 60.0 + parseInt(hour_i)) / 24.0;
+	var week_int = julius_i(parseInt(year_i), parseInt(month_i), parseInt(day_i)) % 7;
+	var elapse_e = elapse_i * 85874.08 / 86400.0;
+	var time_e = elapse_e - Math.floor(elapse_e);
+	var elapse_int = Math.floor(elapse_e)
+	var n = elapse_int + 46886 + 678881;
+	var a = 4 * n + 3 + 4 * Math.floor(0.75 * Math.floor(4.0 * (n + 1) / 146097 + 1));
+	var b = 5 * Math.floor(a % 1461 / 4) + 2;
+	var year_e = parseInt(a / 1461);
+	var month_e = parseInt(b / 153) + 3;
+	var day_e = parseInt((b % 153) / 5) + 1;
+	if(month_e >= 13){
+		year_e++;
+		month_e -= 12;
+	}
+	var hour_e = parseInt(time_e * 24);
+	var minute_e = parseInt((time_e * 24 - hour_e) * 60)
+	var second_e = parseInt(((time_e * 24 - hour_e) * 60 - minute_e) * 60)
+	return "想界暦：" + year_i + "年 " + month_i + "月 " + day_i + "日 " + hour_i + "：" + minute_i + "：" +　second_i + "(" + week[week_int] +")\n現界暦：" + year_e + "年 " + month_e + "月 " + day_e + "日 " + hour_e + "：" + minute_e + "：" + second_e; 
+}
+function format(num, keta) {
+	var d = Math.pow(10, keta);
+	return Math.Math.floor(num * d + .5) / d;
+}
+function calc_ItoE() {
+	var form = document.forms[0];
+	form.result.value = "--- 計算中 ---";
+
+	var str = new String();
+	str += convert_ItoE(form.year.value, form.month.value, form.day.value, form.hour.value, form.minute.value, form.second.value);
+	form.result.value = str;
+}
+
+</SCRIPT>
+</HEAD>
+<BODY>
+<TABLE width=100% border=0 cellspacing=0 cellpadding=8></TABLE>
+<BLOCKQUOTE>
+
+<FORM>
+ <INPUT type=text size=4 name=year>年
+ <INPUT type=text size=2 name=month>月
+ <INPUT type=text size=2 name=day>日
+ <INPUT type=text size=2 name=hour>時
+ <INPUT type=text size=2 name=minute>分
+ <INPUT type=text size=2 name=second>秒
+ <BR>
+ <INPUT type=button value="　想→現　" onclick="calc_ItoE()">
+ <BR>
+ <TEXTAREA name=result rows=9 cols=60 readonly></TEXTAREA>
+</FORM>
+</BLOCKQUOTE>
+</BODY>
+</HTML>
